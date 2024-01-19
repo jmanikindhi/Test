@@ -1,0 +1,470 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "_artifactsLocation": {
+      "type": "string",
+      "defaultValue": "[deployment().properties.templateLink.uri]"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "secureString",
+      "defaultValue": "",
+      "metadata": {
+        "description": "SasToken access to Azure Storage resources."
+      }
+    },
+    "guid": {
+      "type": "string",
+      "defaultValue": "[newGuid()]"
+    },
+    "jointoken": {
+      "type": "string",
+      "metadata": {
+        "description": "Jointoken."
+      },
+      "defaultValue": ""
+    },
+    "httpProxy": {
+      "type": "string",
+      "metadata": {
+        "description": "httpProxy."
+      },
+      "defaultValue": ""
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of resources."
+      },
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "publicIpAddressName": {
+      "type": "string",
+      "defaultValue": "PublicIP",
+      "metadata": {
+        "description": "Name of the Public IP Address."
+      }
+    },
+    "publicIpExistingRgName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group containing existing public IP."
+      }
+    },
+    "publicIpNewOrExistingOrNone": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing",
+        "none"
+      ],
+      "metadata": {
+        "description": "Indicates whether the Public IP is new or existing."
+      }
+    },
+    "securityGroup": {
+      "type": "array",
+      "defaultValue": "bootstrapUi",
+      "allowedValues": [
+        "bootstrapUi",
+        "ssh"
+      ]
+    },
+    "storageAccountName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Unique Name for Storage Account where the Virtual Machine's boot diagnostics will be placed."
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_GRS",
+      "allowedValues": [
+        "Standard_GRS",
+        "Standard_LRS",
+        "Standard_RAGRS"
+      ],
+      "metadata": {
+        "description": "The type of storage account created for boot diagnostics."
+      }
+    },
+    "storageAccountNewOrExistingOrNone": {
+      "type": "string",
+      "defaultValue": "none",
+      "allowedValues": [
+        "new",
+        "existing",
+        "none"
+      ],
+      "metadata": {
+        "description": "Identifies whether to use new or existing Storage Account for boot diagnostics."
+      }
+    },
+    "storageAccountExistingRG": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group containing existing storage account for boot diagnostics."
+      }
+    },
+    "subnet1Name": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet 1 name."
+      }
+    },
+    "subnet1Prefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet 1 prefix."
+      }
+    },
+    "virtualNetworkAddressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual network address prefix."
+      }
+    },
+    "virtualNetworkExistingRGName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group containing existing network."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual network name."
+      }
+    },
+    "vmName": {
+      "type": "string",
+      "defaultValue": "Bloxone",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the Virtual Machine."
+      },
+      "defaultValue": "Standard_F8s_v2"
+    },
+    "vnetNewOrExisting": {
+      "type": "string",
+      "metadata": {
+        "description": "Identifies whether to use new or existing Virtual Network."
+      },
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ]
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {}
+    },
+    "hypervGenerationSelector": {
+      "type": "string",
+      "defaultValue": "V2"
+    }
+  },
+  "variables": {
+    "adminPassword": "[concat(uniqueString(parameters('guid')), '*#Wy5*s6@')]",
+    "cloudConfig": "#cloud-config\nhost_setup:\n",
+    "customDataWithoutHttpProxy": "[concat(variables('cloudConfig'), '\n  jointoken: ', parameters('jointoken'), '\n')]",
+    "customDataWithHttpProxy": "[concat(variables('customDataWithoutHttpProxy'), '  access_https_proxy: ', parameters('httpProxy'), '\n')]",
+    "customData": "[if(empty(parameters('httpProxy')), variables('customDataWithoutHttpProxy'), variables('customDataWithHttpProxy'))]",
+    "enableIPForwarding": true,
+    "imageOffer": "",
+    "imagePublisher": "",
+    "imageSku": "",
+    "imageVersion": "",
+    "nicPrimaryExistingParams": {
+      "enableIPForwarding": {
+        "value": "[variables('enableIPForwarding')]"
+      },
+      "location": {
+        "value": "[parameters('location')]"
+      },
+      "nicName": {
+        "value": "[variables('nicPrimaryName')]"
+      },
+      "subnetId": {
+        "value": "[variables('subnet1ResourceId')]"
+      },
+      "publicIpAddressId": {
+        "value": "[variables('publicIpResourceId')]"
+      },
+      "networkSecurityGroupId": {
+        "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+      }
+    },
+    "nicPrimaryName": "[concat(parameters('vmName'), '-lan1')]",
+    "nicPrimaryNoneParams": {
+      "enableIPForwarding": {
+        "value": "[variables('enableIPForwarding')]"
+      },
+      "location": {
+        "value": "[parameters('location')]"
+      },
+      "nicName": {
+        "value": "[variables('nicPrimaryName')]"
+      },
+      "subnetId": {
+        "value": "[variables('subnet1ResourceId')]"
+      },
+      "networkSecurityGroupId": {
+        "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+      }
+    },
+    "nicPrimarySetupUrl": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic-pip-', variables('publicIpExistingOrNone'), '.json', parameters('_artifactsLocationSasToken')))]",
+    "nsgName": "[concat(parameters('vmName'), '-securityGroup')]",
+    "publicIpAddressType": "Dynamic",
+    "publicIpExistingOrNone": "[replace(parameters('publicIpNewOrExistingOrNone'), 'new', 'existing')]",
+    "publicIpNewOrNone": "[replace(parameters('publicIpNewOrExistingOrNone'), 'existing', 'none')]",
+    "publicIpNewParams": {
+      "location": {
+        "value": "[parameters('location')]"
+      },
+      "publicIpAddressName": {
+        "value": "[parameters('publicIpAddressName')]"
+      },
+      "publicIpAddressType": {
+        "value": "[variables('publicIpAddressType')]"
+      }
+    },
+    "publicIpResourceExisting": "[resourceId(parameters('publicIpExistingRgName'), concat('Microsoft.Network', '/', 'publicIpAddresses'), parameters('publicIpAddressName'))]",
+    "publicIpResourceId": "[if(equals(parameters('publicIpNewOrExistingOrNone'), 'none'), '', if(equals(parameters('publicIpNewOrExistingOrNone'), 'new'), variables('publicIpResourceNew'), variables('publicIpResourceExisting')))]",
+    "publicIpResourceNew": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]",
+    "publicIpSetupUrl": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/publicip-', variables('publicIpNewOrNone'), '.json', parameters('_artifactsLocationSasToken')))]",
+    "securityRuleHtps": [
+      {
+        "name": "HTTPS",
+        "properties": {
+          "description": "Allow HTTPS",
+          "access": "Allow",
+          "destinationAddressPrefix": "*",
+          "destinationPortRange": "443",
+          "direction": "Inbound",
+          "priority": 101,
+          "protocol": "Tcp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*"
+        }
+      }
+    ],
+    "securityRules": "[if(contains(parameters('securityGroup'), 'ssh'), variables('securityRuleHtps'), json('[]'))]",
+    "storageAccountExistingParams": {
+      "storageAccountName": {
+        "value": "[parameters('storageAccountName')]"
+      },
+      "storageAccountExistingRG": {
+        "value": "[parameters('storageAccountExistingRG')]"
+      }
+    },
+    "storageAccountNewParams": {
+      "location": {
+        "value": "[parameters('location')]"
+      },
+      "storageAccountType": {
+        "value": "[parameters('storageAccountType')]"
+      },
+      "storageAccountName": {
+        "value": "[parameters('storageAccountName')]"
+      }
+    },
+    "storageAccountSetupURL": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storageAccount-', parameters('storageAccountNewOrExistingOrNone'), '.json'))]",
+    "subnet1ResourceId": "[concat(variables('vnetResourceId'), '/subnets/', parameters('subnet1Name'))]",
+    "virtualMachineSetUrl": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vm.json', parameters('_artifactsLocationSasToken')))]",
+    "virtualNetworkSetupUrl": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet-', parameters('vnetNewOrExisting'), '.json', parameters('_artifactsLocationSasToken')))]",
+    "vnetNewParams": {
+      "location": {
+        "value": "[parameters('location')]"
+      },
+      "virtualNetworkName": {
+        "value": "[parameters('virtualNetworkName')]"
+      },
+      "virtualNetworkAddressPrefix": {
+        "value": "[parameters('virtualNetworkAddressPrefix')]"
+      },
+      "subnet1Name": {
+        "value": "[parameters('subnet1Name')]"
+      },
+      "subnet1Prefix": {
+        "value": "[parameters('subnet1Prefix')]"
+      }
+    },
+    "vnetResourceExisting": "[resourceId(parameters('virtualNetworkExistingRGName'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+    "vnetResourceId": "[if(equals(parameters('vnetNewOrExisting'), 'new'), variables('vnetResourceNew'), variables('vnetResourceExisting'))]",
+    "vnetResourceNew": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "tags": {
+      "Microsoft.Network/networkInterfaces": "[if(contains(parameters('tags'), 'Microsoft.Network/networkInterfaces'), parameters('tags')['Microsoft.Network/networkInterfaces'], json('{}'))]",
+      "Microsoft.Network/publicIPAddresses": "[if(contains(parameters('tags'), 'Microsoft.Network/publicIPAddresses'), parameters('tags')['Microsoft.Network/publicIPAddresses'], json('{}'))]",
+      "Microsoft.Storage/storageAccounts": "[if(contains(parameters('tags'), 'Microsoft.Storage/storageAccounts'), parameters('tags')['Microsoft.Storage/storageAccounts'], json('{}'))]",
+      "Microsoft.Compute/virtualMachines": "[if(contains(parameters('tags'), 'Microsoft.Compute/virtualMachines'), parameters('tags')['Microsoft.Compute/virtualMachines'], json('{}'))]",
+      "Microsoft.Network/virtualNetworks": "[if(contains(parameters('tags'), 'Microsoft.Network/virtualNetworks'), parameters('tags')['Microsoft.Network/virtualNetworks'], json('{}'))]",
+    }
+  },
+  "resources": [
+    {
+      "name": "pid",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": []
+        }
+      }
+    },
+    {
+      "name": "SettingUpstorageAccount",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('storageAccountSetupURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": "[if(equals(parameters('storageAccountNewOrExistingOrNone'), 'new'), variables('storageAccountNewParams'), if(equals(parameters('storageAccountNewOrExistingOrNone'), 'existing'), variables('storageAccountExistingParams'), json('null')))]"
+      }
+    },
+    {
+      "apiVersion": "2021-12-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('nsgName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "securityRules": "[variables('securityRules')]"
+      }
+    },
+    {
+      "name": "SettingUpVirtualNetwork",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('virtualNetworkSetupUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": "[if(equals(parameters('vnetNewOrExisting'), 'new'), variables('vnetNewParams'), json('null'))]"
+      }
+    },
+    {
+      "name": "SettingUpPrimaryNic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]",
+        "[resourceId('Microsoft.Resources/deployments/', 'SettingUpPublicIP')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('nicPrimarySetupUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": "[if(equals(variables('publicIpExistingOrNone'), 'none'), variables('nicPrimaryNoneParams'), variables('nicPrimaryExistingParams'))]"
+      }
+    },
+    {
+      "name": "SettingUpPublicIP",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('publicIpSetupUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": "[if(equals(variables('publicIpNewOrNone'), 'new'), variables('publicIpNewParams'), json('null'))]"
+      }
+    },
+    {
+      "name": "SettingUpVirtualMachine",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments/', 'SettingUpstorageAccount')]",
+        "[resourceId('Microsoft.Resources/deployments/', 'SettingUpPrimaryNic')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('virtualMachineSetUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[parameters('vmName')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "hardwareProfile": {
+            "value": {
+              "vmSize": "[parameters('vmSize')]"
+            }
+          },
+          "osProfile": {
+            "value": {
+              "computerName": "[parameters('vmName')]",
+              "adminUsername": "[uniqueString(ResourceGroup().Id)]",
+              "adminPassword": "[variables('adminPassword')]",
+              "customData": "[base64(variables('customData'))]"
+            }
+          },
+          "plan": {
+            "value": {
+              "publisher": "[variables('imagePublisher')]",
+              "product": "[variables('imageOffer')]",
+              "name": "[variables('imageSku')]"
+            }
+          },
+          "storageProfile": {
+            "value": {
+              "imageReference": {
+                "publisher": "[variables('imagePublisher')]",
+                "offer": "[variables('imageOffer')]",
+                "sku": "[variables('imageSku')]",
+                "version": "[variables('imageVersion')]"
+              }
+            }
+          },
+          "networkProfile": {
+            "value": {
+              "networkInterfaces": [
+                {
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicPrimaryName'))]",
+                  "properties": {
+                    "primary": true
+                  }
+                }
+              ]
+            }
+          },
+          "diagnosticsProfile": {
+            "value": {
+              "bootDiagnostics": {
+                "enabled": "true",
+                "storageUri": "[if(equals(parameters('storageAccountNewOrExistingOrNone'), 'none'), '', reference('SettingUpstorageAccount').outputs.endpointURL.value)]"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
