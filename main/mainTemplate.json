@@ -182,10 +182,10 @@
     "customDataWithHttpProxy": "[concat(variables('customDataWithoutHttpProxy'), '  access_https_proxy: ', parameters('httpProxy'), '\n')]",
     "customData": "[if(empty(parameters('httpProxy')), variables('customDataWithoutHttpProxy'), variables('customDataWithHttpProxy'))]",
     "enableIPForwarding": true,
-    "imageOffer": "infoblox-bloxone-34",
-    "imagePublisher": "infoblox",
-    "imageSku": "infoblox-bloxone",
-    "imageVersion": "3.8.1",
+    "imageOffer": "",
+    "imagePublisher": "",
+    "imageSku": "",
+    "imageVersion": "",
     "nicPrimaryExistingParams": {
       "enableIPForwarding": {
         "value": "[variables('enableIPForwarding')]"
@@ -307,10 +307,9 @@
   },
   "resources": [
     {
-      "name": "pid-9580e3ee-2645-4585-b71b-2ac1171a74a3-partnercenter",
+      "name": "pid",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -466,6 +465,5 @@
         }
       }
     }
-  ],
-  "outputs": {}  
+  ]
 }

@@ -37,7 +37,8 @@
       "osProfile": "[parameters('osProfile')]",
       "storageProfile": "[parameters('storageProfile')]",
       "networkProfile": "[parameters('networkProfile')]",
-      "diagnosticsProfile": "[parameters('diagnosticsProfile')]"
+      "diagnosticsProfile": "[parameters('diagnosticsProfile')]",
+      "hyperVGeneration": "[parameters('hypervGenerationSelector')]"
     }
   },
   "resources": [
@@ -47,8 +48,7 @@
       "name": "[parameters('vmName')]",
       "location": "[parameters('location')]",
       "properties": "[variables('properties')]",
-      "plan": "[parameters('plan')]",
-      "hyperVGeneration": "[parameters('hypervGenerationSelector')]"
+      "plan": "[parameters('plan')]"
     }
   ],
   "outputs": {}
