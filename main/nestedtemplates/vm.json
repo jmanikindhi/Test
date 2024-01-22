@@ -54,7 +54,7 @@
       "plan": "[parameters('plan')]",
       "hyperVGeneration": "[parameters('hypervGenerationSelector')]",
       "tags": {
-        "value": "[parameters('tags')['Microsoft.Compute/virtualMachines']]"
+        "value": "[parameters('tags')['Microsoft.Compute/virtualMachines'],createObject()]"
       }
     }
   ],
