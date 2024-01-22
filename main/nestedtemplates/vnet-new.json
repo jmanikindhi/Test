@@ -44,7 +44,7 @@
         ]
       },
       "tags": {
-        "value": "[parameters('tags')['Microsoft.Network/virtualNetworks']]"
+        "value": "[if(contains(parameters('tags'), 'Microsoft.Network/virtualNetworks'), parameters('tags')['Microsoft.Network/virtualNetworks'], createObject())]"
       }
     }
   ],
