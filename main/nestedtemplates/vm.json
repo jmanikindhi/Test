@@ -30,7 +30,7 @@
       "type": "string",
       "defaultValue": "V2"
     },
-    "tags": {
+    "tagsByResource": {
       "type": "object",
       "defaultValue": {"Microsoft.Compute/virtualMachines": {}}
     }
@@ -53,9 +53,7 @@
       "properties": "[variables('properties')]",
       "plan": "[parameters('plan')]",
       "hyperVGeneration": "[parameters('hypervGenerationSelector')]",
-      "tags": {
-        "value": "[if(contains(parameters('tags'), 'Microsoft.Compute/virtualMachines'), parameters('tags')['Microsoft.Compute/virtualMachines'], json('{}'))]"
-      }
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]"
     }
   ],
   "outputs": {

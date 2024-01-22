@@ -23,7 +23,7 @@
       },
       "defaultValue": "Standard_GRS"
     },
-    "tags": {
+    "tagsByResource": {
       "type": "object",
       "defaultValue": {"Microsoft.Storage/storageAccounts": {}}
     }
@@ -40,7 +40,7 @@
       "properties": {
       },
       "tags": {
-        "value": "[if(contains(parameters('tags'), 'Microsoft.Storage/storageAccounts'), parameters('tags')['Microsoft.Storage/storageAccounts'], json('{}'))]"
+        "value": "[if(contains(parameters('tagsByResource'), 'Microsoft.Storage/storageAccounts'), parameters('tagsByResource')['Microsoft.Storage/storageAccounts'], json('{}'))]"
       }
     }
   ],

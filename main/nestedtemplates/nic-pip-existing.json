@@ -20,7 +20,7 @@
     "networkSecurityGroupId": {
       "type": "string"
     },
-    "tags": {
+    "tagsByResource": {
       "type": "object",
       "defaultValue": {"Microsoft.Network/networkInterfaces": {}}
     }
@@ -53,7 +53,7 @@
           "id": "[parameters('networkSecurityGroupId')]"
         },
         "tags": {
-          "value": "[if(contains(parameters('tags'), 'Microsoft.Network/networkInterfaces'), parameters('tags')['Microsoft.Network/networkInterfaces'], json('{}'))]"
+          "value": "[if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkInterfaces'), parameters('tagsByResource')['Microsoft.Network/networkInterfaces'], json('{}'))]"
         }
       }
     }

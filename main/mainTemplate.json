@@ -170,15 +170,9 @@
       "type": "string",
       "defaultValue": "V2"
     },
-    "tags": {
+    "tagsByResource": {
       "type": "object",
-      "defaultValue": {
-        "Microsoft.Network/networkInterfaces": {},
-        "Microsoft.Network/publicIPAddresses": {},
-        "Microsoft.Storage/storageAccounts": {},
-        "Microsoft.Compute/virtualMachines": {},
-        "Microsoft.Network/virtualNetworks": {}
-      }
+      "defaultValue": {}   
     }
   },
   "variables": {
@@ -309,14 +303,7 @@
     },
     "vnetResourceExisting": "[resourceId(parameters('virtualNetworkExistingRGName'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
     "vnetResourceId": "[if(equals(parameters('vnetNewOrExisting'), 'new'), variables('vnetResourceNew'), variables('vnetResourceExisting'))]",
-    "vnetResourceNew": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "tags": {
-      "Microsoft.Network/networkInterfaces": "[if(contains(parameters('tags'), 'Microsoft.Network/networkInterfaces'), parameters('tags')['Microsoft.Network/networkInterfaces'], json('{}'))]",
-      "Microsoft.Network/publicIPAddresses": "[if(contains(parameters('tags'), 'Microsoft.Network/publicIPAddresses'), parameters('tags')['Microsoft.Network/publicIPAddresses'], json('{}'))]",
-      "Microsoft.Storage/storageAccounts": "[if(contains(parameters('tags'), 'Microsoft.Storage/storageAccounts'), parameters('tags')['Microsoft.Storage/storageAccounts'], json('{}'))]",
-      "Microsoft.Compute/virtualMachines": "[if(contains(parameters('tags'), 'Microsoft.Compute/virtualMachines'), parameters('tags')['Microsoft.Compute/virtualMachines'], json('{}'))]",
-      "Microsoft.Network/virtualNetworks": "[if(contains(parameters('tags'), 'Microsoft.Network/virtualNetworks'), parameters('tags')['Microsoft.Network/virtualNetworks'], json('{}'))]"
-    }
+    "vnetResourceNew": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
   },
   "resources": [
     {

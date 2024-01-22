@@ -216,7 +216,7 @@
         },
         "elements": [
           {
-            "name": "tags",
+            "name": "tagsByResource",
             "type": "Microsoft.Common.TagsByResource",
             "resources": [
               "Microsoft.Network/networkInterfaces",
@@ -249,7 +249,7 @@
       "vmName": "[basics('vmName')]",
       "vmSize": "[basics('vmSize')]",
       "vnetNewOrExisting": "[steps('vmSettings').network.newOrExisting]",
-      "tags": "[steps('tags').tags]",
+      "tagsByResource": "[steps('tags').tagsByResource]",
       "hypervGenerationSelector": "[basics('hypervGenerationSelector')]"
     }
   }
