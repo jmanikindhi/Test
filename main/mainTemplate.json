@@ -4,7 +4,7 @@
   "parameters": {
     "_artifactsLocation": {
       "type": "string",
-      "defaultValue": "[deployment().properties.templateLink.uri]"
+      "defaultValue": "https://raw.githubusercontent.com/jmanikindhi/Test/main/main/mainTemplate.json"
     },
     "_artifactsLocationSasToken": {
       "type": "secureString",
@@ -65,7 +65,7 @@
       }
     },
     "securityGroup": {
-      "type": "array",
+      "type": "string",
       "defaultValue": "bootstrapUi",
       "allowedValues": [
         "bootstrapUi",
