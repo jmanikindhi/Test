@@ -169,10 +169,6 @@
     "hypervGenerationSelector": {
       "type": "string",
       "defaultValue": "V2"
-    },
-    "tagsByResource": {
-      "type": "object",
-      "defaultValue": {}   
     }
   },
   "variables": {
