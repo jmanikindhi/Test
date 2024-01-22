@@ -166,13 +166,19 @@
         "existing"
       ]
     },
-    "tags": {
-      "type": "object",
-      "defaultValue": {}
-    },
     "hypervGenerationSelector": {
       "type": "string",
       "defaultValue": "V2"
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {
+        "Microsoft.Network/networkInterfaces": {},
+        "Microsoft.Network/publicIPAddresses": {},
+        "Microsoft.Storage/storageAccounts": {},
+        "Microsoft.Compute/virtualMachines": {},
+        "Microsoft.Network/virtualNetworks": {}
+      }
     }
   },
   "variables": {
@@ -182,10 +188,10 @@
     "customDataWithHttpProxy": "[concat(variables('customDataWithoutHttpProxy'), '  access_https_proxy: ', parameters('httpProxy'), '\n')]",
     "customData": "[if(empty(parameters('httpProxy')), variables('customDataWithoutHttpProxy'), variables('customDataWithHttpProxy'))]",
     "enableIPForwarding": true,
-    "imageOffer": "",
-    "imagePublisher": "",
-    "imageSku": "",
-    "imageVersion": "",
+    "imageOffer": "infoblox-bloxone-34",
+    "imagePublisher": "infoblox",
+    "imageSku": "infoblox-bloxone",
+    "imageVersion": "3.8.1",
     "nicPrimaryExistingParams": {
       "enableIPForwarding": {
         "value": "[variables('enableIPForwarding')]"
@@ -309,12 +315,12 @@
       "Microsoft.Network/publicIPAddresses": "[if(contains(parameters('tags'), 'Microsoft.Network/publicIPAddresses'), parameters('tags')['Microsoft.Network/publicIPAddresses'], json('{}'))]",
       "Microsoft.Storage/storageAccounts": "[if(contains(parameters('tags'), 'Microsoft.Storage/storageAccounts'), parameters('tags')['Microsoft.Storage/storageAccounts'], json('{}'))]",
       "Microsoft.Compute/virtualMachines": "[if(contains(parameters('tags'), 'Microsoft.Compute/virtualMachines'), parameters('tags')['Microsoft.Compute/virtualMachines'], json('{}'))]",
-      "Microsoft.Network/virtualNetworks": "[if(contains(parameters('tags'), 'Microsoft.Network/virtualNetworks'), parameters('tags')['Microsoft.Network/virtualNetworks'], json('{}'))]",
+      "Microsoft.Network/virtualNetworks": "[if(contains(parameters('tags'), 'Microsoft.Network/virtualNetworks'), parameters('tags')['Microsoft.Network/virtualNetworks'], json('{}'))]"
     }
   },
   "resources": [
     {
-      "name": "pid",
+      "name": "pid-9580e3ee-2645-4585-b71b-2ac1171a74a3-partnercenter",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "properties": {
