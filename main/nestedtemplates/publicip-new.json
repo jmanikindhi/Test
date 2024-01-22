@@ -27,7 +27,7 @@
         "publicIPAllocationMethod": "[parameters('publicIpAddressType')]"
       },
       "tags": {
-        "value": "[parameters('tags')['Microsoft.Network/publicIPAddresses']]"
+        "value": "[if(contains(parameters('tags'), 'Microsoft.Network/publicIPAddresses'), parameters('tags')['Microsoft.Network/publicIPAddresses'], json('{}'))]"
       }
     }
   ],

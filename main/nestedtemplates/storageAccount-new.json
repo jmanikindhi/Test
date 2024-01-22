@@ -40,7 +40,7 @@
       "properties": {
       },
       "tags": {
-        "value": "[parameters('tags')['Microsoft.Storage/storageAccounts']]"
+        "value": "[if(contains(parameters('tags'), 'Microsoft.Storage/storageAccounts'), parameters('tags')['Microsoft.Storage/storageAccounts'], json('{}'))]"
       }
     }
   ],
