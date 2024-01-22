@@ -53,7 +53,7 @@
           "id": "[parameters('networkSecurityGroupId')]"
         },
         "tags": {
-          "value": "[if(contains(parameters('tags'), 'Microsoft.Network/networkInterfaces'), parameters('tags')['Microsoft.Network/networkInterfaces'], createObject())]"
+          "value": "[if(contains(parameters('tags'), 'Microsoft.Network/networkInterfaces'), parameters('tags')['Microsoft.Network/networkInterfaces'], json('{}'))]"
         }
       }
     }
