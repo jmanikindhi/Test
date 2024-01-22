@@ -32,7 +32,7 @@
     },
     "tagsByResource": {
       "type": "object",
-      "defaultValue": {"Microsoft.Compute/virtualMachines": {}}
+      "defaultValue": {}
     }
   },
   "variables": {

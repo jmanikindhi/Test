@@ -13,7 +13,7 @@
     },
     "tagsByResource": {
       "type": "object",
-      "defaultValue": {"Microsoft.Network/publicIPAddresses": {}}
+      "defaultValue": {}
     }
 
   },

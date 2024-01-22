@@ -19,7 +19,7 @@
     },
     "tagsByResource": {
       "type": "object",
-      "defaultValue": {"Microsoft.Network/virtualNetworks": {}}
+      "defaultValue": {}
     }
   },
   "resources": [

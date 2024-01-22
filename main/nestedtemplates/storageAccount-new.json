@@ -25,7 +25,7 @@
     },
     "tagsByResource": {
       "type": "object",
-      "defaultValue": {"Microsoft.Storage/storageAccounts": {}}
+      "defaultValue": {}
     }
   },
   "resources": [

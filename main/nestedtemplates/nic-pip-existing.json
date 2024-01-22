@@ -22,7 +22,7 @@
     },
     "tagsByResource": {
       "type": "object",
-      "defaultValue": {"Microsoft.Network/networkInterfaces": {}}
+      "defaultValue": {}
     }
   },
   "resources": [
