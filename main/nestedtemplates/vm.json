@@ -41,8 +41,7 @@
       "osProfile": "[parameters('osProfile')]",
       "storageProfile": "[parameters('storageProfile')]",
       "networkProfile": "[parameters('networkProfile')]",
-      "diagnosticsProfile": "[parameters('diagnosticsProfile')]",
-      "hyperVGeneration": "[parameters('hypervGenerationSelector')]"
+      "diagnosticsProfile": "[parameters('diagnosticsProfile')]"
     }
   },
   "resources": [
@@ -53,10 +52,16 @@
       "location": "[parameters('location')]",
       "properties": "[variables('properties')]",
       "plan": "[parameters('plan')]",
+      "hyperVGeneration": "[parameters('hypervGenerationSelector')]",
       "tags": {
         "value": "[parameters('tags')['Microsoft.Compute/virtualMachines']]"
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "tags": {
+      "type": "object",
+      "value": "[parameters('tags')['Microsoft.Compute/virtualMachines']]"
+    }
+  }
 }
