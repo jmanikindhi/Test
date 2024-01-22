@@ -10,12 +10,7 @@
     },
     "publicIpAddressType": {
       "type": "string"
-    },
-    "tagsByResource": {
-      "type": "object",
-      "defaultValue": {}
     }
-
   },
   "resources": [
     {
@@ -27,7 +22,8 @@
         "publicIPAllocationMethod": "[parameters('publicIpAddressType')]"
       },
       "tags": {
-        "value": "[if(contains(parameters('tagsByResource'), 'Microsoft.Network/publicIPAddresses'), parameters('tagsByResource')['Microsoft.Network/publicIPAddresses'], json('{}'))]"
+        "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/publicIPAddresses'), parameters('tagsByResource')['Microsoft.Network/publicIPAddresses'], json('{}')) ]",
+        "type": "object"
       }
     }
   ],

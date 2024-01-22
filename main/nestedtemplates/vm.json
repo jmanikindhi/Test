@@ -29,10 +29,6 @@
     "hypervGenerationSelector": {
       "type": "string",
       "defaultValue": "V2"
-    },
-    "tagsByResource": {
-      "type": "object",
-      "defaultValue": {}
     }
   },
   "variables": {
@@ -53,13 +49,11 @@
       "properties": "[variables('properties')]",
       "plan": "[parameters('plan')]",
       "hyperVGeneration": "[parameters('hypervGenerationSelector')]",
-      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]"
+      "tags": {
+        "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]",
+        "type": "object"
+      }
     }
   ],
-  "outputs": {
-    "tags": {
-      "type": "object",
-      "value": "[parameters('tags')['Microsoft.Compute/virtualMachines']]"
-    }
-  }
+  "outputs": {}
 }

@@ -16,10 +16,6 @@
     },
     "subnet1Prefix": {
       "type": "string"
-    },
-    "tagsByResource": {
-      "type": "object",
-      "defaultValue": {}
     }
   },
   "resources": [
@@ -44,7 +40,8 @@
         ]
       },
       "tags": {
-        "value": "[if(contains(parameters('tagsByResource'), 'Microsoft.Network/virtualNetworks'), parameters('tagsByResource')['Microsoft.Network/virtualNetworks'], json('{}'))]"
+        "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/virtualNetworks'), parameters('tagsByResource')['Microsoft.Network/virtualNetworks'], json('{}')) ]",
+        "type": "object"
       }
     }
   ],

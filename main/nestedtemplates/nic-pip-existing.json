@@ -19,10 +19,6 @@
     },
     "networkSecurityGroupId": {
       "type": "string"
-    },
-    "tagsByResource": {
-      "type": "object",
-      "defaultValue": {}
     }
   },
   "resources": [
@@ -53,7 +49,8 @@
           "id": "[parameters('networkSecurityGroupId')]"
         },
         "tags": {
-          "value": "[if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkInterfaces'), parameters('tagsByResource')['Microsoft.Network/networkInterfaces'], json('{}'))]"
+          "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkInterfaces'), parameters('tagsByResource')['Microsoft.Network/networkInterfaces'], json('{}')) ]",
+          "type": "object"
         }
       }
     }
