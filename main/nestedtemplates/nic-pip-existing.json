@@ -47,10 +47,6 @@
         "enableIPForwarding": "[parameters('enableIPForwarding')]",
         "networkSecurityGroup": {
           "id": "[parameters('networkSecurityGroupId')]"
-        },
-        "tags": {
-          "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkInterfaces'), parameters('tagsByResource')['Microsoft.Network/networkInterfaces'], json('{}')) ]",
-          "type": "object"
         }
       }
     }

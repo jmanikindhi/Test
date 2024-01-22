@@ -20,10 +20,6 @@
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "[parameters('publicIpAddressType')]"
-      },
-      "tags": {
-        "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/publicIPAddresses'), parameters('tagsByResource')['Microsoft.Network/publicIPAddresses'], json('{}')) ]",
-        "type": "object"
       }
     }
   ],

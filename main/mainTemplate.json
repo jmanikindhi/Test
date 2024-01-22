@@ -310,6 +310,7 @@
       "name": "pid-9580e3ee-2645-4585-b71b-2ac1171a74a3-partnercenter",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -323,6 +324,7 @@
       "name": "SettingUpstorageAccount",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Storage/storageAccounts'), parameters('tagsByResource')['Microsoft.Storage/storageAccounts'], json('{}')) ]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -337,6 +339,7 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('nsgName')]",
       "location": "[parameters('location')]",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkSecurityGroups'), parameters('tagsByResource')['Microsoft.Network/networkSecurityGroups'], json('{}')) ]",
       "properties": {
         "securityRules": "[variables('securityRules')]"
       }
@@ -345,6 +348,7 @@
       "name": "SettingUpVirtualNetwork",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/virtualNetworks'), parameters('tagsByResource')['Microsoft.Network/virtualNetworks'], json('{}')) ]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -358,6 +362,7 @@
       "name": "SettingUpPrimaryNic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/networkInterfaces'), parameters('tagsByResource')['Microsoft.Network/networkInterfaces'], json('{}')) ]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments/', 'SettingUpVirtualNetwork')]",
         "[resourceId('Microsoft.Resources/deployments/', 'SettingUpPublicIP')]",
@@ -376,6 +381,7 @@
       "name": "SettingUpPublicIP",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('tagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}')) ]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -389,6 +395,7 @@
       "name": "SettingUpVirtualMachine",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Compute/virtualMachines'), parameters('tagsByResource')['Microsoft.Compute/virtualMachines'], json('{}')) ]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments/', 'SettingUpstorageAccount')]",
         "[resourceId('Microsoft.Resources/deployments/', 'SettingUpPrimaryNic')]"

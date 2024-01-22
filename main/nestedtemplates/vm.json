@@ -48,11 +48,7 @@
       "location": "[parameters('location')]",
       "properties": "[variables('properties')]",
       "plan": "[parameters('plan')]",
-      "hyperVGeneration": "[parameters('hypervGenerationSelector')]",
-      "tags": {
-        "value": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Resources/deployments'), parameters('tagsByResource')['Microsoft.Resources/deployments'], json('{}')) ]",
-        "type": "object"
-      }
+      "hyperVGeneration": "[parameters('hypervGenerationSelector')]"
     }
   ],
   "outputs": {}
