@@ -472,5 +472,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "tags": {
+      "type": "object",
+      "value": "[parameters('tags')['Microsoft.Compute/virtualMachines']]"
+    }
+  }  
 }
