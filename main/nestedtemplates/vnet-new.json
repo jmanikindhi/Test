@@ -28,9 +28,6 @@
       "apiVersion": "2021-12-01",
       "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
-      "tags": {
-        "value": "[parameters('tags')['Microsoft.Network/virtualNetworks']]"
-      },
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -45,6 +42,9 @@
             }
           }
         ]
+      },
+      "tags": {
+        "value": "[parameters('tags')['Microsoft.Network/virtualNetworks']]"
       }
     }
   ],
