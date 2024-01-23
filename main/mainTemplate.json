@@ -180,7 +180,7 @@
     "enableIPForwarding": true,
     "imageOffer": "infoblox-bloxone-34",
     "imagePublisher": "infoblox",
-    "imageSku": "infoblox-bloxone-34",
+    "imageSku": "infoblox-bloxone",
     "imageVersion": "3.8.1",
     "nicPrimaryExistingParams": {
       "enableIPForwarding": {
