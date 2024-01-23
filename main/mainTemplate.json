@@ -4,7 +4,7 @@
   "parameters": {
     "_artifactsLocation": {
       "type": "string",
-      "defaultValue": "[deployment().properties.templateLink.uri]"
+      "defaultValue": "https://raw.githubusercontent.com/jmanikindhi/Test/main/main/mainTemplate.json"
     },
     "_artifactsLocationSasToken": {
       "type": "secureString",
@@ -65,7 +65,7 @@
       }
     },
     "securityGroup": {
-      "type": "array",
+      "type": "string",
       "defaultValue": "bootstrapUi",
       "allowedValues": [
         "bootstrapUi",
@@ -166,10 +166,6 @@
         "existing"
       ]
     },
-    "hypervGenerationSelector": {
-      "type": "string",
-      "defaultValue": "V2"
-    },
     "tagsByResource": {
       "type": "object",
       "defaultValue": {}
@@ -184,7 +180,7 @@
     "enableIPForwarding": true,
     "imageOffer": "infoblox-bloxone-34",
     "imagePublisher": "infoblox",
-    "imageSku": "infoblox-bloxone",
+    "imageSku": "infoblox-bloxone-34",
     "imageVersion": "3.8.1",
     "nicPrimaryExistingParams": {
       "enableIPForwarding": {
