@@ -24,6 +24,7 @@
       "apiVersion": "2021-12-01",
       "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
+      "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.Network/virtualNetworks'), parameters('tagsByResource')['Microsoft.Network/virtualNetworks'], json('{}')) ]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
