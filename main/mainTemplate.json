@@ -396,7 +396,6 @@
       ],
       "properties": {
         "mode": "Incremental",
-        "tagsByResource": "[parameters('tagsByResource')]",
         "templateLink": {
           "uri": "[variables('virtualMachineSetUrl')]",
           "contentVersion": "1.0.0.0"
@@ -405,6 +404,7 @@
           "vmName": {
             "value": "[parameters('vmName')]"
           },
+          "tagsByResource": "[parameters('tagsByResource')]",
           "location": {
             "value": "[parameters('location')]"
           },
