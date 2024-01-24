@@ -345,6 +345,7 @@
       "apiVersion": "2021-04-01",
       "properties": {
         "mode": "Incremental",
+        "tagsByResource": "[parameters('tagsByResource')]",
         "templateLink": {
           "uri": "[variables('virtualNetworkSetupUrl')]",
           "contentVersion": "1.0.0.0"
@@ -395,6 +396,7 @@
       ],
       "properties": {
         "mode": "Incremental",
+        "tagsByResource": "[parameters('tagsByResource')]",
         "templateLink": {
           "uri": "[variables('virtualMachineSetUrl')]",
           "contentVersion": "1.0.0.0"
